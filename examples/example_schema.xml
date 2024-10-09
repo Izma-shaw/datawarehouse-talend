@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<Schema name="Sales">
+
+  <Cube name="Ventes" defaultMeasure="CA">
+
+    <Table name="DIMVentes" />
+
+    <Dimension name="Date de début" foreignKey="heure_debut">
+		<Hierarchy name="Standard" hasAll="true" primaryKey="id_date">
+			<Table name="DIMDate" />
+			<Level name="Année" column="annee" uniqueMembers="true"/>
+			<Level name="Trimestre" column="trimestre"/>
+			<Level name="Nom mois" column="nom_du_mois" ordinalColumn="mois"/>
+			<Level name="Mois" column="mois"/>
+			<Level name="Jour du mois" column="jour_du_mois"/>
+			<Level name="Jour semaine" column="jour_semaine"/>
+			<Level name="Heure" column="heure"/>
+			<Level name="Minute" column="munite"/>
+		</Hierarchy>
+		
+		<Hierarchy name="Standard" hasAll="true" primaryKey="id_date">
+			<Table name="DIMDate" />
+			<Level name="Heure de journee" column="heure"/>
+			<Level name="Minute" column="munite"/>
+			<Level name="Année" column="annee" uniqueMembers="true"/>
+			<Level name="Trimestre" column="trimestre"/>
+			<Level name="Nom mois" column="nom_du_mois"/>
+			<Level name="Mois" column="mois"/>
+			<Level name="Jour du mois" column="jour_du_mois"/>
+			<Level name="Jour semaine" column="jour_semaine"/>
+		</Hierarchy>
+		
+		<Hierarchy name="jourDuMois" hasAll="true" primaryKey="id_date">
+			<Table name="DIMDate" />
+			<Level name="Jour du mois" column="jour_du_mois" />
+			<Level name="Jour semaine" column="jour_semaine" />
+			<Level name="Heure de journee" column="heure" />
+			<Level name="Minutes" column="munite" />
+			<Level name="Mois" column="mois" />
+			<Level name="Nom mois" column="nom_du_mois" ordinalColumn="jour_du_mois" />
+			<Level name="Trimestre" column="trimestre" />
+			<Level name="Année" column="annee"/>
+      </Hierarchy>
+		
+    </Dimension>
+
+    <Dimension name="Lieux" foreignKey="id_lieu">
+		<Hierarchy name="natural" hasAll="true" primaryKey="id_lieu">
+			<Table name="DIMLieu" />
+			<Level name="Region Code" column="code"/>
+			<Level name="Region name" column="regions_name"/>
+			<Level name="Department Code" column="departments_code"/>
+			<Level name="Department Name" column="departments_name"/>
+			<Level name="Code Postal" column="zip"/>
+			<Level name="Ville" column="name"/>
+		</Hierarchy>
+    </Dimension>
+
+    <Dimension name="Clients" foreignKey="id_client">
+
+		<Hierarchy name="naturalClient" hasAll="true" primaryKey="id_client1">
+			<Table name="DIMClient" />
+			<Level name="Region Code" column="code"/>
+			<Level name="Region name Client" column="regions_name"/>
+			<Level name="Department Code" column="departments_code"/>
+			<Level name="Department Name" column="departments_name"/>
+			<Level name="Code Postal" column="code_postal"/>
+			<Level name="Nom" column="nom"/>
+			<Level name="Prenom" column="prenom"/>
+		</Hierarchy>
+    </Dimension>
+
+    <Dimension name="Prestations" foreignKey="id_prestation">
+		<Hierarchy name="naturalPrestations" hasAll="true" primaryKey="id_prestation">
+			<Table name="DIMPrestation" />
+			<Level name="Code Prestation" column="code_prestation"/>
+			<Level name="Nom" column="nom"/>
+			<Level name="Categorie" column="categorie"/>
+		</Hierarchy>
+    </Dimension>
+    
+    <!-- Les différents Measure -->
+    <Measure name="CA" column="prix" aggregator="sum" formatString="Standard" />
+    <Measure name="Nombre de Ventes" column="id_vente" aggregator="count" formatString="Standard" />
+    <Measure name="Duree Intervention" column="duree_intervention" aggregator="avg" formatString="Standard" />
+    <Measure name="Prix moyen" column="prix" aggregator="avg" formatString="Standard" />
+  </Cube>
+
+</Schema>
+

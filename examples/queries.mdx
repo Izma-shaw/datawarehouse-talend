@@ -1,0 +1,108 @@
+-- Le double tiret introduit met une ligne en commentaire. Décommenter l'une ou
+-- l'autre des requêtes ci-dessous pour la tester (en commentant les autres).
+
+-- requête pour lancer olap
+
+--sh run.sh -p examples/example.properties -f examples/queries.mdx | java -jar lib/mondrian_view.jar
+
+
+-- Chiffre d'affaires par mois
+SELECT [Mois].MEMBERS ON COLUMNS, [Measures].[CA] ON ROWS
+FROM Ventes
+
+-- Chiffre d'affaires cumulé sur les mois de janvier et février 2020
+--SELECT [Measures].[CA] ON 0
+--FROM Ventes
+--WHERE ({[2020].[1].[janvier], [2020].[1].[février]})
+
+-- Chiffre d'affaires pour les mois de janvier et février 2020
+--SELECT [Measures].[CA] ON 0, {[2020].[1].[janvier], [2020].[1].[février]} ON 1
+--FROM Ventes
+
+-- exo 2
+-- Écrire une requête MDX permettant de visualiser le chiffre d’affaires total (somme des prix des ventes), 
+-- sur l’ensemble des ventes.
+
+--SELECT [Measures].[CA] ON 0
+--FROM Ventes
+
+-- Exercice 3. Écrire une requête permettant de visualiser le chiffre d’affaires 
+-- total par mois, les mois étant affichés en toutes lettres.
+
+--SELECT [Nom mois].MEMBERS on 0, [Measures].[CA] ON 1
+--FROM Ventes
+
+--Exercice 4. Écrire une requête permettant de visualiser le chiffre d’affaires total par mois,
+-- les mois étant affichés en toutes lettres, pour les régions Normandie et Bretagne.
+
+--SELECT [Nom mois].MEMBERS on 0, [Measures].[CA] on 1, {[Region name].[Normandie],[Region name].[Bretagne]} on 2
+--FROM Ventes
+
+-- Exercice 5. Écrire une requête permettant de visualiser le chiffre d’affaires total par mois, 
+-- les mois étant affichés en toutes lettres et les ventes étant cumulées seulement sur 
+-- celles ayant eu lieu dans les régions Normandie et Bretagne
+
+--SELECT [Nom mois].MEMBERS on 0, [Measures].[CA] on 1
+--FROM Ventes
+--WHERE ({[Region name].[Normandie],[Region name].[Bretagne]})
+
+-- Exercice 6. Écrire une requête permettant de visualiser le chiffre d’affaires et le nombre de ventes par
+-- heure de la journée (cumulés sur toute la période). Par exemple, on voudrait pouvoir visualiser le nombre
+-- total de ventes réalisés à 4 h du matin, sur tout l’historique. Qu’observe-t-on en exécutant la requête ?
+-- Indication : Il faudra définir des hiérarchies dédiées.
+
+--SELECT [Heure de journee].MEMBERS on 0, {[Measures].[CA],[Measures].[Nombre de Ventes]} on 1
+--FROM Ventes
+
+-- Exercice 7. Écrire de même une requête pour les jours du mois. Par exemple, on voudrait pouvoir visualiser 
+-- le nombre total de ventes réalisés un 15 du mois, sur tout l’historique. Qu’observe-t-on en exécutant la requête ?
+
+--SELECT [jourDuMois].[Jour du mois].MEMBERS on 0, [Measures].[Nombre de Ventes] on 1
+--FROM Ventes
+
+-- Exercice 8. Écrire une requête permettant de visualiser les nombres de ventes, en fonction de la région
+-- du client et de celle où la prestation a été réalisée. Qu’observe-t-on en exécutant la requête ?
+
+--SELECT [Region name Client].MEMBERS on 1, [Region name].MEMBERS on 0, [Measures].[Nombre de Ventes] on 2
+--FROM Ventes
+
+-- Exercice 9. Écrire une requête permettant de visualiser le nombre et le prix moyen des ventes par
+-- département. Qu’observe-t-on en exécutant la requête ?
+
+--SELECT [Department Name].MEMBERS on 0, {[Measures].[Nombre de Ventes],[Measures].[Prix moyen]} on 1
+--FROM Ventes
+
+-- Exercice 10. Écrire une requête permettant de visualiser le nombre et le prix moyen des prestations
+-- réalisées en Normandie, et le nombre et le prix moyen de celles réalisées en Bretagne, pour chaque
+-- trimestre de 2020.
+
+--SELECT {[natural].[Region name].[Normandie],[natural].[Region name].[Bretagne]} on 0,[Standard].[2020].CHILDREN on 1, {[Measures].[Nombre de Ventes],[Measures].[Prix moyen]} on 2
+--FROM Ventes
+
+-- Exercice 11. Écrire une requête permettant de visualiser les durées moyennes d’intervention, en fonction
+-- de la catégorie de prestation, de la région où la prestation a été réalisée, et du trimestre
+
+--SELECT [naturalPrestations].[Categorie].MEMBERS on 0,[natural].[Region name].MEMBERS on 1, [Standard].[Trimestre].MEMBERS on 2,[Measures].[Duree Intervention] on 3
+--FROM Ventes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
